@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "storage1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/HintApp/providers/Microsoft.ServiceLinker/linkers/AzureWebJobsStorage_D6C1AD6B4E, /subscriptions/a80cece6-2874-4768-bc70-5afb77470ca8/resourceGroups/HintProject/providers/Microsoft.Web/sites/HintApp/providers/Microsoft.ServiceLinker/linkers/AzureWebJobsStorage_5DB00E3E9C",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/hintstorage",
+      "type": "storage.azure",
+      "connectionId": "AzureWebJobsStorage",
+      "dynamicId": null
+    }
+  }
+}
