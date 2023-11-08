@@ -28,7 +28,22 @@ namespace FinalProjectBackend.Features.Cards
         }
 
 
+        [FunctionName("GetCardsFromCategory")]
+        public static async Task<IActionResult> GetCardsFromCategory(
+      [HttpTrigger(AuthorizationLevel.Function, "get", Route = CardConstants.GetCardsFromCategory)] HttpRequest req,
+      [CosmosDB(databaseName: "hint-db", containerName: CardConstants.Container, SqlQuery = "select * from c WHERE c.id = {categoryId}", Connection = "CosmosDBConnectionString")] IEnumerable<Card> cards,
+      ILogger log)
+        {
+            log.LogInformation("Received a GET request for cards.");
+            string categoryId = req.Query["category-id"];
 
+            if (string.IsNullOrEmpty(categoryId))
+            {
+                return new BadRequestObjectResult("Please provide a valid ID in the query string.");
+            }
+
+            return new OkObjectResult(cards);
+        }
 
         [FunctionName("PostCard")]
         public static async Task<IActionResult> PostCard(
@@ -42,7 +57,8 @@ namespace FinalProjectBackend.Features.Cards
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var data = JsonConvert.DeserializeObject<Card>(requestBody);
-              
+
+                data.Id = Guid.NewGuid().ToString();
 
                 await card.AddAsync(data);
                 return new OkObjectResult("Data saved to Cosmos DB.");

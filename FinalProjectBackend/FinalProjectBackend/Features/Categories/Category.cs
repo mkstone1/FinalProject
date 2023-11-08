@@ -7,8 +7,5 @@ namespace FinalProjectBackend.Features.Categories
     {
         [JsonProperty("id")]
         public string id;
-
-        [JsonProperty("title")]
-        public string Title;
     }
 }

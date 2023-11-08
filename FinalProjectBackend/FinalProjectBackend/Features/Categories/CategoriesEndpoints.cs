@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
+using FinalProjectBackend.Features.Cards.Models;
 
 
 namespace FinalProjectBackend.Features.Categories
@@ -27,5 +28,33 @@ namespace FinalProjectBackend.Features.Categories
        
             return new OkObjectResult(categories);
         }
+
+
+        [FunctionName("PostCategory")]
+        public static async Task<IActionResult> PostCategories(
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = CategoriesConstants.DefaultEndpoint)] HttpRequest req,
+           [CosmosDB(databaseName: "hint-db", containerName: CategoriesConstants.Container, Connection = "CosmosDBConnectionString")] IAsyncCollector<Category> category,
+           ILogger log)
+        {
+
+            log.LogInformation("Received a POST request.");
+
+            try
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                var data = JsonConvert.DeserializeObject<Category>(requestBody);
+
+                await category.AddAsync(data);
+                return new OkObjectResult("Data saved to Cosmos DB.");
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error: {ex.Message}");
+                return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
+            }
+
+        }
+
+      
     }
 }
