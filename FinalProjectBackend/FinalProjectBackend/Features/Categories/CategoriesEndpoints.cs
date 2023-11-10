@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 using FinalProjectBackend.Features.Cards.Models;
-
+using FinalProjectBackend.Features.Categories.Models;
 
 namespace FinalProjectBackend.Features.Categories
 {

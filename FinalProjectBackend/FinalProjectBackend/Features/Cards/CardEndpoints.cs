@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using FinalProjectBackend.Features.Cards.Models;
+using Microsoft.Azure.Cosmos;
 
 namespace FinalProjectBackend.Features.Cards
 {
@@ -31,18 +32,33 @@ namespace FinalProjectBackend.Features.Cards
         [FunctionName("GetCardsFromCategory")]
         public static async Task<IActionResult> GetCardsFromCategory(
       [HttpTrigger(AuthorizationLevel.Function, "get", Route = CardConstants.GetCardsFromCategory)] HttpRequest req,
-      [CosmosDB(databaseName: "hint-db", containerName: CardConstants.Container, SqlQuery = "select * from c WHERE c.id = {categoryId}", Connection = "CosmosDBConnectionString")] IEnumerable<Card> cards,
-      ILogger log)
+      [CosmosDB("Cards", "Cards",
+            Connection= "CosmosDBConnectionString")]
+            CosmosClient client,
+            ILogger log)
         {
             log.LogInformation("Received a GET request for cards.");
-            string categoryId = req.Query["category-id"];
+
+            string categoryId = req.Query["categoryId"];
 
             if (string.IsNullOrEmpty(categoryId))
             {
                 return new BadRequestObjectResult("Please provide a valid ID in the query string.");
             }
 
-            return new OkObjectResult(cards);
+            var container = client.GetContainer("hint-db", "Cards");
+            using var iterator = container.GetItemQueryIterator<Card>(
+                new QueryDefinition("select * from Cards c where c.categoryId = @categoryId")
+              .WithParameter("@categoryId", categoryId));
+
+            var result = await iterator.ReadNextAsync();
+            if (result.Count == 0)
+            {
+                return new BadRequestObjectResult("No items found with this id");
+            }
+
+            var card = result.Resource;
+            return new OkObjectResult(card);
         }
 
         [FunctionName("PostCard")]
@@ -68,8 +84,6 @@ namespace FinalProjectBackend.Features.Cards
                 log.LogError($"Error: {ex.Message}");
                 return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
             }
-
-
         }
     }
 }
