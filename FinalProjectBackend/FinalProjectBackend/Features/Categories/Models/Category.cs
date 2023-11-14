@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace FinalProjectBackend.Features.Categories
+namespace FinalProjectBackend.Features.Categories.Models
 {
     public class Category
     {
         [JsonProperty("id")]
         public string id;
-
-        [JsonProperty("title")]
-        public string Title;
     }
 }

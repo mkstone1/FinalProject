@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using FinalProjectBackend.Features.Cards.Models;
+using Microsoft.Azure.Cosmos;
 
 namespace FinalProjectBackend.Features.Cards
 {
@@ -28,7 +29,37 @@ namespace FinalProjectBackend.Features.Cards
         }
 
 
+        [FunctionName("GetCardsFromCategory")]
+        public static async Task<IActionResult> GetCardsFromCategory(
+      [HttpTrigger(AuthorizationLevel.Function, "get", Route = CardConstants.GetCardsFromCategory)] HttpRequest req,
+      [CosmosDB("Cards", "Cards",
+            Connection= "CosmosDBConnectionString")]
+            CosmosClient client,
+            ILogger log)
+        {
+            log.LogInformation("Received a GET request for cards.");
 
+            string categoryId = req.Query["categoryId"];
+
+            if (string.IsNullOrEmpty(categoryId))
+            {
+                return new BadRequestObjectResult("Please provide a valid ID in the query string.");
+            }
+
+            var container = client.GetContainer("hint-db", "Cards");
+            using var iterator = container.GetItemQueryIterator<Card>(
+                new QueryDefinition("select * from Cards c where c.categoryId = @categoryId")
+              .WithParameter("@categoryId", categoryId));
+
+            var result = await iterator.ReadNextAsync();
+            if (result.Count == 0)
+            {
+                return new BadRequestObjectResult("No items found with this id");
+            }
+
+            var card = result.Resource;
+            return new OkObjectResult(card);
+        }
 
         [FunctionName("PostCard")]
         public static async Task<IActionResult> PostCard(
@@ -42,7 +73,8 @@ namespace FinalProjectBackend.Features.Cards
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var data = JsonConvert.DeserializeObject<Card>(requestBody);
-              
+
+                data.Id = Guid.NewGuid().ToString();
 
                 await card.AddAsync(data);
                 return new OkObjectResult("Data saved to Cosmos DB.");
@@ -52,8 +84,6 @@ namespace FinalProjectBackend.Features.Cards
                 log.LogError($"Error: {ex.Message}");
                 return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
             }
-
-
         }
     }
 }

@@ -11,6 +11,7 @@ namespace FinalProjectBackend.Features.Cards
 
         public const string DefaultEndpoint = "cards";
         public const string GetSingleObjectUrl = DefaultEndpoint + "/{id}";
+        public const string GetCardsFromCategory = DefaultEndpoint + "/category";
         public const string Container = "Cards";
 
     }
