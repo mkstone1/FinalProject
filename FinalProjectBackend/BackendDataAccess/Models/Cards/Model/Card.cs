@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FinalProjectBackend.Features.Cards;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,10 @@ namespace BackendDataAccess.Models.Cards.Model
         [JsonProperty("title")]
         public string Title;
 
-        [JsonProperty("wrong-answer")]
+        [JsonProperty("wrongAnswer")]
         public string WrongAnswer;
 
         [JsonProperty("answers")]
         public List<Answer> Answers;
-
     }
 }
