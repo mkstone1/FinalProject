@@ -1,0 +1,10 @@
+{
+    "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "CosmosDBConnectionString": "AccountEndpoint=https://hint-project-db.documents.azure.com:443/;AccountKey=8QijKDdm54BIEvrGWhj9Wm1c5YO2fKu4MSGMkAXlkbCecF1Wz6gXEkMlqLbpyVQr4hQCSRPzsH0sACDbZpLKBA==;",
+    "CosmosDbName": "hint-db",
+    "CosmosDbUrl": "https://hint-project-db.documents.azure.com:443/"
+  }
+}

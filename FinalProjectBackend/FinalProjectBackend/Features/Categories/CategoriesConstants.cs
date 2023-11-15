@@ -16,8 +16,8 @@ namespace FinalProjectBackend.Features.Categories
 {
     public static class CategoriesConstants
     {
-        public const string DefaultEndpoint = "Categories";
-        public const string Container = "Categories";
+        public const string DefaultEndpoint = "categories";
+        public const string Container = "categories";
        
     }
 }
