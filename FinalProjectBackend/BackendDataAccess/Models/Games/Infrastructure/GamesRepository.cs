@@ -59,7 +59,6 @@ namespace BackendDataAccess.Models.Games.Infrastructure
         {
             try
             {
-                game.Id = Guid.NewGuid().ToString();
                 await _container.CreateItemAsync(game);
             }
             catch (Exception ex)

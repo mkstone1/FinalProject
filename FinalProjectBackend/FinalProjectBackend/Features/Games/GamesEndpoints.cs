@@ -1,6 +1,7 @@
 ﻿using BackendDataAccess.Models.Categories.Model;
 using BackendDataAccess.Models.Games.Infrastructure;
 using BackendDataAccess.Models.Games.Model;
+using BackendDataAccess.Services.Games;
 using FinalProjectBackend.Features.Categories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,12 @@ namespace FinalProjectBackend.Features.Games
 {
     public class GamesEndpoints
     {
-        private readonly IGamesRepository _gamesRepository;
-        public GamesEndpoints(IGamesRepository gamesRepository)
+        private readonly IGamesRepository _gameRepository;
+        private readonly IGameServices _gameServices;
+        public GamesEndpoints(IGamesRepository gamesRepository, IGameServices gameServices)
         {
-            _gamesRepository = gamesRepository;
+            _gameRepository = gamesRepository;
+            _gameServices = gameServices;
         }
 
 
@@ -34,15 +37,12 @@ namespace FinalProjectBackend.Features.Games
             if (req.Query.ContainsKey("gameId"))
             {
                 string gameId = req.Query["gameId"];
-
-                // Return cards filtered by category
-                var game = await _gamesRepository.GetGameFromId(gameId);
+                var game = await _gameRepository.GetGameFromId(gameId);
                 return new OkObjectResult(game);
-
             }
             else
             {
-                var games = await _gamesRepository.GetAllGames();
+                var games = await _gameRepository.GetAllGames();
                 return new OkObjectResult(games);
             }
         }
@@ -54,22 +54,25 @@ namespace FinalProjectBackend.Features.Games
       ILogger log)
         {
 
-            log.LogInformation("Received a POST request.");
-
             try
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var data = JsonConvert.DeserializeObject<Game>(requestBody);
-
-                await _gamesRepository.UpsertGame(data);
-                return new OkObjectResult("Data saved to Cosmos DB.");
+                if (req.Query.Count != 0)
+                {
+                    return new OkObjectResult(data);
+                }
+                else
+                {
+                    var gameId = _gameServices.InitGame(data);
+                    return new OkObjectResult(gameId);
+                }
             }
             catch (Exception ex)
             {
                 log.LogError($"Error: {ex.Message}");
                 return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
             }
-
         }
     }
 }
