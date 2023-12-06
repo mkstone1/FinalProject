@@ -14,16 +14,20 @@ using Microsoft.Azure.Documents.Client;
 using BackendDataAccess.Models.Cards.Model;
 using Microsoft.Azure.Cosmos;
 using BackendDataAccess.Models.Cards.Infrastructure;
+using Microsoft.Azure.Cosmos.Linq;
+using BackendDataAccess.Services.Cards;
 
 namespace FinalProjectBackend.Features.Cards
 {
     public class CardEndpoints
     {
         private readonly ICardRepository _cardRepository;
+        private readonly ICardServices _cardServices;
 
-        public CardEndpoints(ICardRepository cardRepository)
+        public CardEndpoints(ICardRepository cardRepository, ICardServices cardServices)
         {
             _cardRepository = cardRepository;
+            _cardServices = cardServices;
         }
 
         [FunctionName("GetCards")]
@@ -33,14 +37,16 @@ namespace FinalProjectBackend.Features.Cards
         {
             log.LogInformation("Received a GET request for cards.");
 
-            if (req.Query.ContainsKey("categoryId"))
+            if (req.Query.Count != 0)
             {
-                string categoryId = req.Query["categoryId"];
-
-                // Return cards filtered by category
-                var cardsByCategory = await _cardRepository.GetCardsByCategoryAsync(categoryId);
-                return new OkObjectResult(cardsByCategory);
-
+                try { 
+                var cards = await _cardServices.GetCardsFromQueryString(req.Query);
+                return new OkObjectResult(cards);
+                }
+                catch(Exception ex)
+                {
+                    return new BadRequestObjectResult(ex.Message);
+                }
             }
             else
             {

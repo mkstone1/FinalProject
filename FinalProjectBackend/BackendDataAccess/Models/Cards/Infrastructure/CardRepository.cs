@@ -58,6 +58,24 @@ namespace BackendDataAccess.Models.Cards.Infrastructure
             return cards;
         }
 
+        public async Task<IEnumerable<Card>> GetCardFromCardId(string cardId)
+        {
+            var query = new QueryDefinition("SELECT * FROM c WHERE c.id = @cardId")
+            .WithParameter("@cardId", cardId);
+
+            var iterator = _container.GetItemQueryIterator<Card>(query);
+
+            var cards = new List<Card>();
+
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync();
+                cards.AddRange(response);
+            }
+
+            return cards;
+        }
+
         public async Task UpsertCard(Card card)
         {
             card.Id = Guid.NewGuid().ToString();

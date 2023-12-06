@@ -21,10 +21,15 @@ namespace BackendDataAccess.Models.Games.Model
         [JsonProperty("currentRound")]
         public int CurrentRound;
 
+        [JsonProperty("amountOfTeams")]
+        public int AmountOfTeams;
+
         [JsonProperty("teamScore")]
         public List<TeamScore> TeamScore;
 
         [JsonProperty("currentTeam")]
         public string CurrentTeam;
+
+        public DateTime CreatedAt;
     }
 }

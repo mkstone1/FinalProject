@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using BackendDataAccess.Models.Cards.Infrastructure;
 using BackendDataAccess.Models.Categories.Infrastructure;
 using BackendDataAccess.Models.Games.Infrastructure;
+using BackendDataAccess.Services.Cards;
+using BackendDataAccess.Services.Games;
 
 [assembly: FunctionsStartup(typeof(FinalProjectBackend.Startup))]
 
@@ -17,10 +19,12 @@ namespace FinalProjectBackend
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            // Add your dependencies here
             builder.Services.AddSingleton<ICardRepository, CardRepository>();
             builder.Services.AddSingleton<ICategoryRepository, CategoryRepository>();
             builder.Services.AddSingleton<IGamesRepository, GamesRepository>();
+
+            builder.Services.AddSingleton<ICardServices, CardServices>();
+            builder.Services.AddSingleton<IGameServices, GameServices>();
         }
     }
 }

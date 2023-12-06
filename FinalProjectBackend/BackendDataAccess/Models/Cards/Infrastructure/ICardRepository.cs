@@ -11,7 +11,10 @@ namespace BackendDataAccess.Models.Cards.Infrastructure
     {
         Task<IEnumerable<Card>> GetAllCardsAsync();
 
+        Task<IEnumerable<Card>> GetCardFromCardId(string cardId);
+
         Task<IEnumerable<Card>> GetCardsByCategoryAsync(string categoryId);
+
         Task UpsertCard(Card card);
 
         

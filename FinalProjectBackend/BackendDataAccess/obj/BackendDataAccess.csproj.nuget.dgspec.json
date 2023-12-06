@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\CodingProjects\\C#\\Final Project\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj": {}
+    "C:\\CodingProjects\\FinalExam\\FinalProject\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj": {}
   },
   "projects": {
-    "C:\\CodingProjects\\C#\\Final Project\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj": {
+    "C:\\CodingProjects\\FinalExam\\FinalProject\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\CodingProjects\\C#\\Final Project\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj",
+        "projectUniqueName": "C:\\CodingProjects\\FinalExam\\FinalProject\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj",
         "projectName": "BackendDataAccess",
-        "projectPath": "C:\\CodingProjects\\C#\\Final Project\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj",
-        "packagesPath": "C:\\Users\\Stone\\.nuget\\packages\\",
-        "outputPath": "C:\\CodingProjects\\C#\\Final Project\\FinalProjectBackend\\BackendDataAccess\\obj\\",
+        "projectPath": "C:\\CodingProjects\\FinalExam\\FinalProject\\FinalProjectBackend\\BackendDataAccess\\BackendDataAccess.csproj",
+        "packagesPath": "C:\\Users\\Mark\\.nuget\\packages\\",
+        "outputPath": "C:\\CodingProjects\\FinalExam\\FinalProject\\FinalProjectBackend\\BackendDataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Stone\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mark\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +40,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
             "Microsoft.Azure.Cosmos": {
               "target": "Package",
               "version": "[3.36.0, )"
@@ -61,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.405\\RuntimeIdentifierGraph.json"
         }
       }
     }
