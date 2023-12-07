@@ -27,12 +27,39 @@ namespace BackendDataAccess.Services.Games
             {
                 game.TeamScore.Add(new TeamScore
                 {
-                    teamName = $"team{i}",
+                    teamName = $"team {i}",
                     Score = 0,
                     RoundsPlayed = 0
                 }); ;
             }
             game.CreatedAt = DateTime.Now;
+            await _gameRepository.UpsertGame(game);
+
+            return game.Id;
+        }
+
+        public async Task<string> InitQuickStartGame()
+        {
+            Game game = new Game();
+            game.Id = Guid.NewGuid().ToString();
+            game.TeamScore = new List<TeamScore>();
+            game.TeamScore.Add(new TeamScore
+            {
+                teamName = "Hold 1",
+                Score = 0,
+                RoundsPlayed = 0
+            });
+            game.TeamScore.Add(new TeamScore
+            {
+                teamName = "Hold 2",
+                Score = 0,
+                RoundsPlayed = 0
+            });
+
+            game.CurrentTeam = "Hold 1";
+
+            game.CreatedAt = DateTime.Now;
+
             await _gameRepository.UpsertGame(game);
 
             return game.Id;

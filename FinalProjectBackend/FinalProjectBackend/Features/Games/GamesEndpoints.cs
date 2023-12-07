@@ -28,11 +28,11 @@ namespace FinalProjectBackend.Features.Games
 
 
         [FunctionName("GetGames")]
-        public async Task<IActionResult> GetCategories(
+        public async Task<IActionResult> GetGame(
            [HttpTrigger(AuthorizationLevel.Function, "get", Route = GamesConstants.DefaultEndpoint)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("Received a GET request for cards.");
+            log.LogInformation("Received a GET request for Game.");
 
             if (req.Query.ContainsKey("gameId"))
             {
@@ -49,10 +49,11 @@ namespace FinalProjectBackend.Features.Games
 
 
         [FunctionName("PostGame")]
-        public async Task<IActionResult> PostCategories(
+        public async Task<IActionResult> PostGame(
       [HttpTrigger(AuthorizationLevel.Function, "post", Route = GamesConstants.DefaultEndpoint)] HttpRequest req,
       ILogger log)
         {
+            log.LogInformation("Received a POST request for Game.");
 
             try
             {
@@ -64,9 +65,28 @@ namespace FinalProjectBackend.Features.Games
                 }
                 else
                 {
-                    var gameId = _gameServices.InitGame(data);
+                    var gameId = await _gameServices.InitGame(data);
                     return new OkObjectResult(gameId);
                 }
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error: {ex.Message}");
+                return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
+            }
+        }
+
+        [FunctionName("PostQuickStartGame")]
+        public async Task<IActionResult> PostQuickStartGame(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = GamesConstants.QuickStartEndpoint)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("Received a POST request for QuickStartGame.");
+
+            try
+            {
+                var gameId = await _gameServices.InitQuickStartGame();
+                return new JsonResult(gameId);
             }
             catch (Exception ex)
             {
