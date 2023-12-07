@@ -59,7 +59,7 @@ namespace BackendDataAccess.Models.Games.Infrastructure
         {
             try
             {
-                await _container.CreateItemAsync(game);
+                await _container.UpsertItemAsync(game);
             }
             catch (Exception ex)
             {

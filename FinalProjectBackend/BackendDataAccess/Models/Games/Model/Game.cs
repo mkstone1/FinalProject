@@ -30,6 +30,9 @@ namespace BackendDataAccess.Models.Games.Model
         [JsonProperty("currentTeam")]
         public string CurrentTeam;
 
+        [JsonProperty("maxScore")]
+        public int MaxScore;
+
         public DateTime CreatedAt;
     }
 }
