@@ -59,6 +59,8 @@ namespace BackendDataAccess.Services.Games
             game.CurrentTeam = "Hold 1";
 
             game.CreatedAt = DateTime.Now;
+            game.MaxScore = 20;
+            game.RoundLength = 60;
 
             await _gameRepository.UpsertGame(game);
 

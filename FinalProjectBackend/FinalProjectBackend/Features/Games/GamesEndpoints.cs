@@ -94,5 +94,29 @@ namespace FinalProjectBackend.Features.Games
                 return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
             }
         }
+
+        [FunctionName("PutGame")]
+        public async Task<IActionResult> PutGame(
+           [HttpTrigger(AuthorizationLevel.Function, "put", Route = GamesConstants.DefaultEndpoint)] HttpRequest req,
+           ILogger log)
+        {
+            log.LogInformation("Received a PUT request for Game.");
+
+            try
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                var data = JsonConvert.DeserializeObject<Game>(requestBody);
+
+                await _gameRepository.UpsertGame(data);
+
+                return new OkResult();
+
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error: {ex.Message}");
+                return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
+            }
+        }
     }
 }
