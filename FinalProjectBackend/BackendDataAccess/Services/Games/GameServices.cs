@@ -1,11 +1,6 @@
 ﻿using BackendDataAccess.Models.Games.Infrastructure;
 using BackendDataAccess.Models.Games.Model;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BackendDataAccess.Services.Games
 {
@@ -57,7 +52,6 @@ namespace BackendDataAccess.Services.Games
             });
 
             game.CurrentTeam = "Hold 1";
-            game.MaxScore = 10;
 
             game.CreatedAt = DateTime.Now;
             game.MaxScore = 20;
