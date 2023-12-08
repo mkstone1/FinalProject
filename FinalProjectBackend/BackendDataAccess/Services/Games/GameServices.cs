@@ -57,6 +57,7 @@ namespace BackendDataAccess.Services.Games
             });
 
             game.CurrentTeam = "Hold 1";
+            game.MaxScore = 10;
 
             game.CreatedAt = DateTime.Now;
             game.MaxScore = 20;
