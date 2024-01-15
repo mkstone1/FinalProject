@@ -10,6 +10,7 @@ namespace FinalProjectBackend.Features.Games
     {
         public const string DefaultEndpoint = "games";
         public const string QuickStartEndpoint = DefaultEndpoint + "/QuickStart";
+        public const string QuickStartEndpointRandom = DefaultEndpoint + "/QuickStartRandom";
 
 
     }

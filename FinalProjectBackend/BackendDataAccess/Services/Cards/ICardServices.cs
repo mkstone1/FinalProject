@@ -11,6 +11,7 @@ namespace BackendDataAccess.Services.Cards
     public interface ICardServices
     {
         Task<IEnumerable<Card>> GetCardsFromQueryString(IQueryCollection query);
+        Task<IEnumerable<Card>> GetRandomCards();
 
     }
 }

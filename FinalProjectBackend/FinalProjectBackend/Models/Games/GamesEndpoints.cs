@@ -59,15 +59,11 @@ namespace FinalProjectBackend.Features.Games
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var data = JsonConvert.DeserializeObject<Game>(requestBody);
-                if (req.Query.Count != 0)
-                {
-                    return new OkObjectResult(data);
-                }
-                else
-                {
-                    var gameId = await _gameServices.InitGame(data);
-                    return new OkObjectResult(gameId);
-                }
+
+
+                var gameId = await _gameServices.InitGame(data);
+                return new JsonResult(gameId);
+
             }
             catch (Exception ex)
             {
@@ -85,7 +81,26 @@ namespace FinalProjectBackend.Features.Games
 
             try
             {
-                var gameId = await _gameServices.InitQuickStartGame();
+                var gameId = await _gameServices.InitQuickStartGame(false);
+                return new JsonResult(gameId);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error: {ex.Message}");
+                return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
+            }
+        }
+
+        [FunctionName("PostQuickStartGameRandom")]
+        public async Task<IActionResult> PostQuickStartGameRandom(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = GamesConstants.QuickStartEndpointRandom)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("Received a POST request for QuickStartGame.");
+
+            try
+            {
+                var gameId = await _gameServices.InitQuickStartGame(true);
                 return new JsonResult(gameId);
             }
             catch (Exception ex)
@@ -111,6 +126,25 @@ namespace FinalProjectBackend.Features.Games
 
                 return new OkResult();
 
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error: {ex.Message}");
+                return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
+            }
+        }
+
+        [FunctionName("DeleteAllGames")]
+        public async Task<IActionResult> DeleteAllGames(
+         [HttpTrigger(AuthorizationLevel.Function, "Delete", Route = GamesConstants.DefaultEndpoint)] HttpRequest req,
+         ILogger log)
+        {
+            log.LogInformation("Received a Delete request for Game.");
+
+            try
+            {
+                await _gameRepository.DeleteAllGames();
+                return new OkResult();
             }
             catch (Exception ex)
             {

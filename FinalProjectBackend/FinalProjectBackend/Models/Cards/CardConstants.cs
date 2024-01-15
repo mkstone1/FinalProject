@@ -10,5 +10,6 @@ namespace FinalProjectBackend.Features.Cards
     {
 
         public const string DefaultEndpoint = "cards";
+        public const string RandomCardEndpoint = DefaultEndpoint + "/Random";
     }
 }

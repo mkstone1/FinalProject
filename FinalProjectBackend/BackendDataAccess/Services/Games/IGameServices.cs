@@ -11,6 +11,6 @@ namespace BackendDataAccess.Services.Games
     public interface IGameServices
     {
         Task<string> InitGame(Game game);
-        Task<string> InitQuickStartGame();
+        Task<string> InitQuickStartGame(bool isRandom);
     }
 }

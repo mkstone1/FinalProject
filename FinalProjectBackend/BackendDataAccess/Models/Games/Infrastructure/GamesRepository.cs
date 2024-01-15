@@ -5,6 +5,7 @@ using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -66,6 +67,35 @@ namespace BackendDataAccess.Models.Games.Infrastructure
                 throw new Exception($"An unexpected error occurred: {ex.Message}", ex);
             }
 
+        }
+
+        public async Task DeleteAllGames()
+        {
+            var query = new QueryDefinition("Select * from c");
+            var iterator = _container.GetItemQueryIterator<Game>(query);
+
+            var results = new List<Game>();
+
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync();
+                results.AddRange(response);
+            }
+
+            foreach(Game game  in results)
+            {
+                try
+                {
+                    await _container.DeleteItemAsync<Game>(game.Id, PartitionKey.None);
+                    // If not partitioned, use: await _container.DeleteItemAsync<Game>(game.Id, PartitionKey.None);
+                    Console.WriteLine($"Deleted game with Id: {game.Id}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Document not found with Id: {game.Id}");
+                    // Handle not found exception as needed
+                }
+            }
         }
     }
 }

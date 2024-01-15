@@ -91,5 +91,30 @@ namespace BackendDataAccess.Models.Cards.Infrastructure
 
         }
 
+        public async Task<IEnumerable<Card>> GetRandomCardByCategory(string category)
+        {
+            // Query the Cosmos DB container for a random card of the specified category
+            var query = new QueryDefinition($"SELECT * FROM c WHERE c.categoryId = '{category}'");
+            var iterator = _container.GetItemQueryIterator<Card>(query);
+
+            var cards = new List<Card>();
+            var cardToReturn = new List<Card>();
+
+            {
+                var response = await iterator.ReadNextAsync();
+                cards.AddRange(response);
+            }
+
+            // If there are cards in the category, select a random one
+            if (cards.Count > 0)
+            {
+                Random random = new Random();
+                int randomIndex = random.Next(cards.Count);
+                cardToReturn.Add(cards[randomIndex]) ;
+            }
+
+            return cardToReturn;
+        }
+
     }
 }

@@ -16,7 +16,8 @@ namespace BackendDataAccess.Models.Cards.Infrastructure
         Task<IEnumerable<Card>> GetCardsByCategoryAsync(string categoryId);
 
         Task UpsertCard(Card card);
+        Task<IEnumerable<Card>> GetRandomCardByCategory(string category);
 
-        
+
     }
 }

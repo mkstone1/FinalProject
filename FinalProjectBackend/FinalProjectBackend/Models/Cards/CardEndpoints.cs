@@ -55,6 +55,25 @@ namespace FinalProjectBackend.Features.Cards
             }     
         }
 
+        [FunctionName("GetRandomCards")]
+        public async Task<IActionResult> GetRandomCards(
+           [HttpTrigger(AuthorizationLevel.Function, "get", Route = CardConstants.RandomCardEndpoint)] HttpRequest req,
+           ILogger log)
+        {
+            log.LogInformation("Received a GET request for random cards.");
+
+            try
+            {
+                var cards = await _cardServices.GetRandomCards();
+                return new JsonResult(cards);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error: {ex.Message}");
+                return new BadRequestObjectResult("Failed to save data to Cosmos DB.");
+            }
+        }
+
 
         [FunctionName("PostCard")]
         public  async Task<IActionResult> PostCard(

@@ -40,5 +40,54 @@ namespace BackendDataAccess.Services.Cards
             }
 
         }
+
+        public async Task<IEnumerable<Card>> GetRandomCards()
+        {
+            var cards = new List<Card>();
+     
+            for (int i =0; i <4; i++)
+            {
+                var category = SelectCategory();
+
+                var card = await _cardRepository.GetRandomCardByCategory(category);
+                cards.AddRange(card);
+            }
+       
+            return cards;
+
+        }
+
+        private string SelectCategory()
+        {
+            Dictionary<string, double> categoryProbabilities = new Dictionary<string, double>
+        {
+            { "Nynne", 1 },
+            { "Tale", 1 },
+            { "Mime", 1 },
+        };
+
+            Random random = new Random();
+       
+
+            double totalProbability = categoryProbabilities.Values.Sum();
+
+           
+            double randomValue = random.NextDouble() * totalProbability;
+
+      
+            double cumulativeProbability = 0;
+
+            foreach (var category in categoryProbabilities.Keys)
+            {
+                cumulativeProbability += categoryProbabilities[category];
+
+                if (randomValue <= cumulativeProbability)
+                {
+                    return category;
+                }
+            }
+
+            return categoryProbabilities.Keys.Last();
+        }
     }
 }

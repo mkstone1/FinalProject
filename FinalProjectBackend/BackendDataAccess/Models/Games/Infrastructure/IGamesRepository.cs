@@ -13,5 +13,7 @@ namespace BackendDataAccess.Models.Games.Infrastructure
 
         Task<Game> GetGameFromId(string gameId);
         Task UpsertGame(Game game);
+
+        Task DeleteAllGames();
     }
 }

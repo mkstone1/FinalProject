@@ -33,6 +33,9 @@ namespace BackendDataAccess.Models.Games.Model
         [JsonProperty("maxScore")]
         public int MaxScore;
 
+        [JsonProperty("withRandomCards")]
+        public bool WithRandomCards;
+
         public DateTime CreatedAt;
     }
 }
